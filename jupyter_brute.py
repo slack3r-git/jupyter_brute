@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Created by slack3r = slack3r_git
+# Created by slack3r = slack3r-git
 # Created to take a password list, and burte force a Jupyter Server
 # Writen in 2 hours, and after alcohol consumption
 # 
