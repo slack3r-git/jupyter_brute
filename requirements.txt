@@ -1,0 +1,3 @@
+iechanicalsoup
+python-nmap 
+termcolor
